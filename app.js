@@ -137,7 +137,7 @@ $(function(){
             for(i = 0; i < Math.floor(Math.random() * 3); i++){
                 newAsteroid = new Player(context, avatar);
                 newAsteroid.speed = 3 + Math.round(Math.random() * 3);
-                newAsteroid.position = [canvasWidth - newAsteroid.size[0], (Math.random() * canvasHeight) - newAsteroid.size[1]] 
+                newAsteroid.position = [canvasWidth - newAsteroid.size[0],(Math.random() * (canvasHeight - newAsteroid.size[1]))] 
                 array.push(newAsteroid);
             } 
         }
