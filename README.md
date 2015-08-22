@@ -16,10 +16,10 @@ This file is where you will document your project.
 
 
 ### Technologies Used
-*What technologies did you use while developing this project?*
+*So far, HTML with the HTML5 Canvas playing a central role, CSS, and jQuery/Javascript*
 
 ###Existing features
-*What features does your new racing app have?*
+*Two players can race against an animated starfield with randomly generated asteroids approaching head-on at procedurally generated postions and velocities. Players can move in all 4 directions. The field of play resizes itself dynamically with the window*
 
 ###Planned features
-*What changes would you make to your project if you continued with it in the future?*
+*The next feature on the list is hit detection. A collision with an ateroid will destroy a players ship in an explosion and reset their position to the start. After that, I'll be adding the "Win" scenario with appropriate celbratory congrats screen. Third up will be tracking wins and high scores. I also need to add a reset button to the game screen. Lastly, if time allows, I'll add a ship selection screen for player avatar customization*
