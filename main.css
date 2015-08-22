@@ -1,1 +1,63 @@
-/* Style Sheet */
+#game-screen{
+    background-image: url(starfieldGood.gif);
+    background-size: cover;
+    border: 3px solid grey;
+    vertical-align: middle;
+    margin-top: 0px;
+    box-shadow: 2px 2px 3px black;
+}
+
+h1{
+    text-align: center;
+    font-family: 'trebuchet MS1';
+    margin-bottom: 7px;
+    margin-top: 5px;
+    letter-spacing: 5px;
+    font-variant: small-caps;
+}
+
+#titleBar{
+    background-color: #736C6C;
+}
+
+div{
+    padding: 1px;
+}
+
+canvas{
+
+    margin: 0;
+}
+
+#top-track{
+    margin-top: 10px;
+    border-bottom: 2px dashed rgba(250, 250, 250, 0.025);
+}
+
+#bottom-track{
+    border-top: 2px dashed rgba(250, 250, 250, 0.025);
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.frame{
+    position: relative;
+}
+
+
+
+img{
+    display: none;
+}
+
+#fig1{
+    display: inline-block;
+}
+
+figcaption{
+    font-family: arial;
+}
+
+#figBox{
+    text-align: center;
+}

@@ -1,19 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Rrrracing Game</title>
+  <title>Darth Racer</title>
   <meta charset="utf-8" />
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" type="text/css" href="main.css">
-  <!-- Hey, where's the jquery? -->
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script type="text/javascript" src="app.js"></script>
 </head>
 <body>
-  <!-- HTML Body -->
-  <h1>Rrrracing Game</h1>
-  <img src="http://www.cs.utah.edu/~gk/atwork/img/hevequip2.gif" alt="under construction"></img>
-  <!-- Game Board Here -->
-  <!-- Reset button -->
+  <div id="titleBar">  
+    <h1>Darth Racer</h1>
+  </div>    
+  <div id="game-screen">  
+      <div class="frame" id="top-track">
+          <canvas id="canvas1-front" class="fore" width="99.5%" height="200px"></canvas>
+      </div>  
+      <div class="frame" id="bottom-track">
+          <canvas id="canvas2-front" class="fore" width="99.5%" height="200px"></canvas>
+      </div>
+  </div>
+  <span id="figBox">  
+      <figure>
+          <figcaption><b>Player 1: WASD  </b> -|||:||:|||- <b> Player 2:</b> ◄▲▼►</figcaption>
+          <img src="image003.png" id="fig1" height="80px"/>
+      </figure>
+  </span>    
+    <img src="star_wars_x-wing.gif" id='xWing'/>
+    <img src="interceptor.gif" id="interceptor"/>
+    <img src="asteroid-icon.png" id="asteroid"/>
 </body>
 </html>
