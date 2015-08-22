@@ -50,25 +50,25 @@ $(function(){
    // Update game objects
     var update = function (player1, player2, modifier) {
         if (38 in keysDown) { // Player holding up arrow
-            player2.position[1] -= player2.speed * (modifier * 2);
+            player2.position[1] -= player2.speed * (modifier * 3);
         }
         if (40 in keysDown) { // Player holding down arrow
-            player2.position[1] += player2.speed * (modifier * 2);
+            player2.position[1] += player2.speed * (modifier * 3);
         }
         if (37 in keysDown) { // Player holding left arrow
-            player2.position[0] -= player2.speed * modifier;
+            player2.position[0] -= player2.speed * (modifier * 2);
         }
         if (39 in keysDown) { // Player holding right arrow
             player2.position[0] += player2.speed * (modifier / 2);
         }
         if (87 in keysDown) { // Player holding w
-            player1.position[1] -= player1.speed * (modifier * 2);
+            player1.position[1] -= player1.speed * (modifier * 3);
         }
         if (83 in keysDown) { // Player holding s
-            player1.position[1] += player1.speed * (modifier * 2);
+            player1.position[1] += player1.speed * (modifier * 3);
         }
         if (65 in keysDown) { // Player holding a
-            player1.position[0] -= player1.speed * modifier;
+            player1.position[0] -= player1.speed * (modifier * 2);
         }
         if (68 in keysDown) { // Player holding d
             player1.position[0] += player1.speed * (modifier / 2);
@@ -147,6 +147,7 @@ $(function(){
         array.forEach(function(asteroid, index){
             asteroid.drawPlayer();
             asteroid.position[0] -= asteroid.speed;
+            //remove old asteroids from the array
             if(asteroid.position[0] <= 0){
                 array.splice(index, 1);
             }
