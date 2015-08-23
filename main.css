@@ -30,7 +30,6 @@ div{
 }
 
 canvas{
-
     margin: 0;
 }
 
@@ -43,6 +42,10 @@ canvas{
     border-top: 2px dashed rgba(250, 250, 250, 0.025);
     margin-top: 5px;
     margin-bottom: 10px;
+}
+
+.effects{
+    position: absolute;
 }
 
 .frame{

@@ -2,13 +2,17 @@
 $(function(){
     //instantiate a new game
     var game = new Game();
+    var music = new Audio('StarWarsElevatorMusic.mp3');
+    music.volume = 0.4;
+    music.loop = true;
+    music.play();
     //set canvas widths to the Div #frame widths so that we can change them dynamically
     $('.fore').attr("width", $('div').width()) 
     //keeps track of the width of the tracks
     var canvasWidth = $('#canvas1-front').width();
     var canvasHeight = 200;
     //initialize the race tracks
-    var tracks = new Tracks($('#canvas1-front'),$('#canvas2-front'));
+    var tracks = new Tracks($('#canvas1-front'), $('#canvas2-front'), $('#top-effects'), $('#bottom-effects'));
 
     /*CHANGE THESE TO TWEAK GAME-PLAY*///=====================================
     //difficulty: Lower is Harder! 1 === asteroids off. 0 === impossible!!!
@@ -20,12 +24,14 @@ $(function(){
     var finishPosition = .9;
     //=========================================================================
        
-    //prep holding arrays for the spawned asteroids
-     topAsteroids = [];
+    //prep holding arrays for the spawned asteroids and explosions
+    var  topAsteroids = [];
     var bottomAsteroids = [];
+    var topExplosions = [];
+    var bottomExplosions = [];
     
     //instantiatie both players
-    var player1 = new Player(tracks.topTrackCanvasContext, game.images['slave1']);
+    var player1 = new Player(tracks.topTrackCanvasContext, game.images['xWing']);
     var player2 = new Player(tracks.bottomTrackCanvasContext, game.images['interceptor']);
     
     //draw the players in the start position
@@ -87,8 +93,14 @@ $(function(){
     
     //================================HERE IS MY MAIN GAME LOOP!==================================================================================
     setInterval(function(){ 
-        //reset the canvas width to clear the frame
+        //test
+        if(topExplosions[0]){
+            console.log(topExplosions[0].context);
+        }
+        //reset the canvas widths to clear the frame
         $('.fore').attr("width", $('div').width())
+        tracks.topEffectsCanvas.width = canvasWidth;
+        tracks.bottomEffectsCanvas.width = canvasWidth;
         
         //move the players
         setPlayerPositions(player1, player2, speedMultiplier);
@@ -100,15 +112,45 @@ $(function(){
         updateAsteroids(bottomAsteroids);
         
         //check for collisions with both players==TO DO: ADD EXPLOSION EFFECT / MAYBE AUDIO===
-        topAsteroids.forEach(function(asteroid){
+        topAsteroids.forEach(function(asteroid, index){
             if(collides(asteroid, player1)){
+                    var explosion = new Explosion(tracks.topEffectsCanvasContext
+                                                , [player1.position[0] + 5, player1.position[1]]);
+                    topExplosions.unshift(explosion);
                     player1.position = [15, 80];
+                    topAsteroids.splice(index, 1);
+                    var boom = new Audio('Explosion_04.wav');
+                    boom.volume = 0.75;
+                    boom.play();
                }
         });
-        bottomAsteroids.forEach(function(asteroid){
+        bottomAsteroids.forEach(function(asteroid, index){
             if(collides(asteroid, player2)){
+                    var explosion = new Explosion(tracks.bottomEffectsCanvasContext
+                                                , [player2.position[0] + 5, player2.position[1]]);
+                    topExplosions.unshift(explosion);
                     player2.position = [15, 80];
+                    bottomAsteroids.splice(index, 2);
+                    var boom = new Audio('Explosion_04.wav');
+                    boom.volume = 0.75;
+                    boom.play();
                }
+        });
+        
+        bottomExplosions.forEach(function(explosion, index){
+            if(explosion.frameCounter <= 0){
+                topExplosions.splice(index, 1);
+            } else{
+                explosion.animate();
+            }
+        });
+        
+        topExplosions.forEach(function(explosion, index){
+            if(explosion.frameCounter <= 0){
+                topExplosions.splice(index, 1);
+            } else{
+                explosion.animate();
+            }
         });
         
         //check for a winner
@@ -118,6 +160,8 @@ $(function(){
         window.onresize = function(){
             $('.fore').attr("width", $('div').width()) 
             canvasWidth = $('#canvas1-front').width();
+            tracks.topEffectsCanvas.width = canvasWidth;
+            tracks.bottomEffectsCanvas.width = canvasWidth;
             console.log(canvasWidth);
             setPlayerPositions(player1, player2, speedMultiplier);
         };
@@ -170,17 +214,44 @@ $(function(){
         this.avatar = avatar;
         this.context = context;
         this.drawPlayer =  function(){
-            context.drawImage(avatar, this.position[0]
+            this.context.drawImage(avatar, this.position[0]
                               , this.position[1], this.size[0]
                               , this.size[1]);
         };
     }
     
-    function Tracks(canvas1, canvas2){
+    function Tracks(canvas1, canvas2, canvas3, canvas4){
         this.topTrackCanvas = canvas1[0];
         this.topTrackCanvasContext = this.topTrackCanvas.getContext('2d');
         this.bottomTrackCanvas = canvas2[0];
         this.bottomTrackCanvasContext = this.bottomTrackCanvas.getContext('2d');
+        this.topEffectsCanvas = canvas3[0];
+        this.topEffectsCanvasContext = this.topEffectsCanvas.getContext('2d');
+        this.bottomEffectsCanvas = canvas4[0];
+        this.bottomEffectsCanvasContext = this.bottomEffectsCanvas.getContext('2d');
+        this.topEffectsCanvas.width = this.topTrackCanvas.width;
+        this.bottomEffectsCanvas.width = this.bottomTrackCanvas.width;
+    }
+    
+    function Explosion(context, position){
+        this.size = [50, 50];
+        this.position = position;
+        this.frames = [$('#explosion1')[0], $('#explosion3')[0], $('#explosion3')[0]]
+        this.frameCounter = 10;
+        this.context = context;
+        this.activeFrame = this.frames[0];
+        this.constructor.prototype.animate = function(){
+            if(this.frameCounter < 7){
+                this.activeFrame = this.frames[1];
+            } else if (this.frameCounter < 4){
+                this.activeFrame = this.frames[2];
+            }
+            
+            this.context.drawImage(this.activeFrame, this.position[0]
+                              , this.position[1], this.size[0]
+                              , this.size[1]);
+            this.frameCounter--;
+        }
     }
     
     function generateAsteroids(context, array, avatar){
