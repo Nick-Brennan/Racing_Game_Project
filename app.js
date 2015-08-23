@@ -21,7 +21,7 @@ $(function(){
     //=========================================================================
        
     //prep holding arrays for the spawned asteroids
-    var topAsteroids = [];
+     topAsteroids = [];
     var bottomAsteroids = [];
     
     //instantiatie both players
@@ -99,16 +99,14 @@ $(function(){
         generateAsteroids(tracks.bottomTrackCanvasContext, bottomAsteroids, game.images['asteroidImg']);
         updateAsteroids(bottomAsteroids);
         
-        //check for collisions with both players
+        //check for collisions with both players==TO DO: ADD EXPLOSION EFFECT / MAYBE AUDIO===
         topAsteroids.forEach(function(asteroid){
             if(collides(asteroid, player1)){
-                    console.log("Boom! Player 1 is Hit!");
                     player1.position = [15, 80];
                }
         });
         bottomAsteroids.forEach(function(asteroid){
             if(collides(asteroid, player2)){
-                    console.log("Boom! Player 2 is Hit!");
                     player2.position = [15, 80];
                }
         });
@@ -193,7 +191,7 @@ $(function(){
                 newAsteroid.speed = 3 + Math.round(Math.random() * 3);
                 newAsteroid.position = [canvasWidth - newAsteroid.size[0]
                                         ,(Math.random() * (canvasHeight - newAsteroid.size[1]))]; 
-                array.push(newAsteroid);
+                array.unshift(newAsteroid);
             } 
         }
     }
@@ -203,7 +201,7 @@ $(function(){
             asteroid.drawPlayer();
             asteroid.position[0] -= asteroid.speed;
             //remove old asteroids from the array
-            if(asteroid.position[0] <= 0){
+            if(asteroid.position[0] <= -300){
                 array.splice(index, 1);
             }
         });
