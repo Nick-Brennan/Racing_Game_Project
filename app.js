@@ -2,7 +2,7 @@
 $(function(){
     //instantiate a new game
     var game = new Game();
-    //set canvas widths to the Div widths so that we can change them dynamically
+    //set canvas widths to the Div #frame widths so that we can change them dynamically
     $('.fore').attr("width", $('div').width()) 
     //keeps track of the width of the tracks
     var canvasWidth = $('#canvas1-front').width();
@@ -19,35 +19,37 @@ $(function(){
     var speedMultiplier = 0.15;
     var finishPosition = .9;
     //=========================================================================
-    
-    var images = {
-        xWing : $('#xWing')[0],
-        interceptor : $('#interceptor')[0],
-        asteroidImg : $('#asteroid')[0]
-    }
        
-    //asteroid prep
+    //prep holding arrays for the spawned asteroids
     var topAsteroids = [];
     var bottomAsteroids = [];
     
-    //instantiating both players
-    var player1 = new Player(tracks.topTrackCanvasContext, images['xWing']);
-    var player2 = new Player(tracks.bottomTrackCanvasContext, images['interceptor']);
+    //instantiatie both players
+    var player1 = new Player(tracks.topTrackCanvasContext, game.images['slave1']);
+    var player2 = new Player(tracks.bottomTrackCanvasContext, game.images['interceptor']);
     
-    //drawing the players in the start position
+    //draw the players in the start position
     player1.drawPlayer();
     player2.drawPlayer();
+    
+    //adjust the width when the windows is resized
+    window.onresize = function(){
+        $('.fore').attr("width", $('div').width()) 
+        canvasWidth = $('#canvas1-front').width();
+        player1.drawPlayer();
+        player2.drawPlayer();
+    };
     
     //Setting up event listeners for keyboard input====TO DO: PACKAGE IN "GAME" OBJECT or keyboard?==
     var keysDown = {};
 
-    addEventListener("keydown", function(e) {
+    addEventListener("keydown", function(e){
         keysDown[e.keyCode] = true;
-    }, false);
+    });
 
-    addEventListener("keyup", function(e) {
+    addEventListener("keyup", function(e){
         delete keysDown[e.keyCode];
-    }, false);
+    });
 
    //set player positions based on keyDown info
     var setPlayerPositions = function (player1, player2, multiplier) {
@@ -82,28 +84,22 @@ $(function(){
         player1.drawPlayer();
         player2.drawPlayer();
     }
-   
     
-    //adjust the width when the windows is resized
-    window.onresize = function(){
-        $('.fore').attr("width", $('div').width()) 
-        canvasWidth = $('#canvas1-front').width();
-        player1.drawPlayer();
-        player2.drawPlayer();
-    };
     //================================HERE IS MY MAIN GAME LOOP!==================================================================================
     setInterval(function(){ 
         //reset the canvas width to clear the frame
         $('.fore').attr("width", $('div').width())
         
+        //move the players
         setPlayerPositions(player1, player2, speedMultiplier);
-        //add asteroids
-        generateAsteroids(tracks.topTrackCanvasContext, topAsteroids, images['asteroidImg']);
+        
+        //add asteroids to both tracks
+        generateAsteroids(tracks.topTrackCanvasContext, topAsteroids, game.images['asteroidImg']);
         updateAsteroids(topAsteroids);
-        generateAsteroids(tracks.bottomTrackCanvasContext, bottomAsteroids, images['asteroidImg']);
+        generateAsteroids(tracks.bottomTrackCanvasContext, bottomAsteroids, game.images['asteroidImg']);
         updateAsteroids(bottomAsteroids);
         
-        //check for collisions
+        //check for collisions with both players
         topAsteroids.forEach(function(asteroid){
             if(collides(asteroid, player1)){
                     console.log("Boom! Player 1 is Hit!");
@@ -116,6 +112,8 @@ $(function(){
                     player2.position = [15, 80];
                }
         });
+        
+        //check for a winner
         game.checkForWinners();
 
         //allow for window resize during gameplay, cuz why not ;-P
@@ -125,10 +123,19 @@ $(function(){
             console.log(canvasWidth);
             setPlayerPositions(player1, player2, speedMultiplier);
         };
-
     }, 15);
 //==================================================================================================================================================    
     function Game(){
+        this.images = {
+            xWing : $('#xWing')[0],
+            interceptor : $('#interceptor')[0],
+            tardis : $('#tardis')[0],
+            viper : $('#viper')[0],
+            TB04 : $('#TB04')[0],
+            delorean : $('#delorean')[0],
+            slave1 : $('#slave1')[0],
+            asteroidImg : $('#asteroid')[0]
+        };
         this.setBoundries = function(player){
             if (player.position[0] < 0){
                 player.position[0] = 1;
@@ -142,12 +149,14 @@ $(function(){
             }
         };
         this.checkForWinners = function(){
-            if ((player1.position[0] >= canvasWidth * .95)&&(player2.position[0] < canvasWidth * finishPosition)){
+            if ((player1.position[0] >= canvasWidth * .95)
+                    &&(player2.position[0] < canvasWidth * finishPosition)){
                 alert('Player 1 Wins!');
                 keysDown = {};
                 player1.position = [15, 80];
                 player2.position = [15, 80];
-            }else if ((player2.position[0] >= canvasWidth * .95)&&(player1.position[0] < canvasWidth * finishPosition)){
+            }else if ((player2.position[0] >= canvasWidth * .95)
+                      &&(player1.position[0] < canvasWidth * finishPosition)){
                 alert('Player 2 Wins!');
                 keysDown = {};
                 player1.position = [15, 80];

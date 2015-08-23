@@ -3,7 +3,7 @@ body{
 }
 
 #game-screen{
-    background-image: url(starfieldGood.gif);
+    background-image: url(images/starfieldGood.gif);
     background-size: cover;
     border: 3px solid grey;
     vertical-align: middle;
@@ -14,10 +14,11 @@ body{
 h1{
     text-align: center;
     font-family: 'trebuchet MS1';
+    font-variant: small-caps;
     margin-bottom: 7px;
     margin-top: 5px;
     letter-spacing: 5px;
-    font-variant: small-caps;
+    
 }
 
 #titleBar{
