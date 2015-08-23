@@ -1,40 +1,42 @@
-//DOCUMENT READY FUNCTION==========================
+
 $(function(){
+    //instantiate a new game
+    var game = new Game();
     //set canvas widths to the Div widths so that we can change them dynamically
     $('.fore').attr("width", $('div').width()) 
     //keeps track of the width of the tracks
     var canvasWidth = $('#canvas1-front').width();
     var canvasHeight = 200;
-    console.log(canvasWidth);
-    //adjust the width when the windows is resized
-    window.onresize = function(){
-        $('.fore').attr("width", $('div').width()) 
-        canvasWidth = $('#canvas1-front').width();
-        console.log(canvasWidth);
-        topTrackCanvasContext.drawImage(xWing, 15, 80, 26, 26);
-        bottomTrackCanvasContext.drawImage(interceptor, 15, 80, 26, 26);
-    };
+    //initialize the race tracks
+    var tracks = new Tracks($('#canvas1-front'),$('#canvas2-front'));
+
+    /*CHANGE THESE TO TWEAK GAME-PLAY*///=====================================
+    //difficulty: Lower is Harder! 1 === asteroids off. 0 === impossible!!!
+    //Speed multiplier: small changes make a large impact.
+    //adjust if altering FPS (setInterval time value) or to make ships snappier
+    //Lowering finish position brings it closer to the start.
+    var difficulty = 0.97;
+    var speedMultiplier = 0.15;
+    var finishPosition = .9;
+    //=========================================================================
     
-    //setting up the TOP track====TO DO: PACKAGE IN "TRACK" OBJECT=====
-    var topTrackCanvas = $('#canvas1-front')[0];
-    var topTrackCanvasContext = topTrackCanvas.getContext('2d');
-    var xWing = $('#xWing')[0];
-    
-    //setting up the BOTTOM track====TO DO: PACKAGE IN "TRACK" OBJECT=====
-    var bottomTrackCanvas = $('#canvas2-front')[0];
-    var bottomTrackCanvasContext = bottomTrackCanvas.getContext('2d');
-    var interceptor = $('#interceptor')[0];
-    //instantiating both players
-    var player1 = new Player(topTrackCanvasContext, xWing);
-    var player2 = new Player(bottomTrackCanvasContext, interceptor);
-    //drawing the players in the start position
-    player1.drawPlayer();
-    player2.drawPlayer();
+    var images = {
+        xWing : $('#xWing')[0],
+        interceptor : $('#interceptor')[0],
+        asteroidImg : $('#asteroid')[0]
+    }
+       
     //asteroid prep
     var topAsteroids = [];
     var bottomAsteroids = [];
-    var asteroidImg = $('#asteroid')[0];
-
+    
+    //instantiating both players
+    var player1 = new Player(tracks.topTrackCanvasContext, images['xWing']);
+    var player2 = new Player(tracks.bottomTrackCanvasContext, images['interceptor']);
+    
+    //drawing the players in the start position
+    player1.drawPlayer();
+    player2.drawPlayer();
     
     //Setting up event listeners for keyboard input====TO DO: PACKAGE IN "GAME" OBJECT or keyboard?==
     var keysDown = {};
@@ -47,78 +49,112 @@ $(function(){
         delete keysDown[e.keyCode];
     }, false);
 
-   // Update game objects
-    var update = function (player1, player2, modifier) {
+   //set player positions based on keyDown info
+    var setPlayerPositions = function (player1, player2, multiplier) {
         if (38 in keysDown) { // Player holding up arrow
-            player2.position[1] -= player2.speed * (modifier * 3);
+            player2.position[1] -= player2.speed * (multiplier * 4);
         }
         if (40 in keysDown) { // Player holding down arrow
-            player2.position[1] += player2.speed * (modifier * 3);
+            player2.position[1] += player2.speed * (multiplier * 4);
         }
         if (37 in keysDown) { // Player holding left arrow
-            player2.position[0] -= player2.speed * (modifier * 2);
+            player2.position[0] -= player2.speed * (multiplier * 2);
         }
         if (39 in keysDown) { // Player holding right arrow
-            player2.position[0] += player2.speed * (modifier / 2);
+            player2.position[0] += player2.speed * (multiplier / 2);
         }
         if (87 in keysDown) { // Player holding w
-            player1.position[1] -= player1.speed * (modifier * 3);
+            player1.position[1] -= player1.speed * (multiplier * 4);
         }
         if (83 in keysDown) { // Player holding s
-            player1.position[1] += player1.speed * (modifier * 3);
+            player1.position[1] += player1.speed * (multiplier * 4);
         }
         if (65 in keysDown) { // Player holding a
-            player1.position[0] -= player1.speed * (modifier * 2);
+            player1.position[0] -= player1.speed * (multiplier * 2);
         }
         if (68 in keysDown) { // Player holding d
-            player1.position[0] += player1.speed * (modifier / 2);
+            player1.position[0] += player1.speed * (multiplier / 2);
         }
         
-        setBoundries(player1);
-        setBoundries(player2);
+        game.setBoundries(player1);
+        game.setBoundries(player2);
         
         player1.drawPlayer();
         player2.drawPlayer();
     }
-    //keep the players on their canvases===TO DO: PACKAGE IN GAME OBJECT======
-    function setBoundries(player){
-        if (player.position[0] < 0){
-            player.position[0] = 1;
-        } else if (player.position[0] > canvasWidth - player.size[0]){
-            player.position[0] = canvasWidth - (player.size[0] - 1);
-        }
-        if (player.position[1] < 0){
-            player.position[1] = 1;
-        } else if (player.position[1] > canvasHeight - player.size[1]){
-            player.position[1] = canvasHeight - (player.size[1] - 1);
-        }
-    }
+   
+    
+    //adjust the width when the windows is resized
+    window.onresize = function(){
+        $('.fore').attr("width", $('div').width()) 
+        canvasWidth = $('#canvas1-front').width();
+        player1.drawPlayer();
+        player2.drawPlayer();
+    };
     //================================HERE IS MY MAIN GAME LOOP!==================================================================================
     setInterval(function(){ 
         //reset the canvas width to clear the frame
         $('.fore').attr("width", $('div').width())
         
-        update(player1, player2, 0.125);
+        setPlayerPositions(player1, player2, speedMultiplier);
         //add asteroids
-        generateAsteroids(topTrackCanvasContext, topAsteroids, asteroidImg);
+        generateAsteroids(tracks.topTrackCanvasContext, topAsteroids, images['asteroidImg']);
         updateAsteroids(topAsteroids);
-        generateAsteroids(bottomTrackCanvasContext, bottomAsteroids, asteroidImg);
+        generateAsteroids(tracks.bottomTrackCanvasContext, bottomAsteroids, images['asteroidImg']);
         updateAsteroids(bottomAsteroids);
-       
-        //TO DO: make check for win part of "Game" object=============================================
-        if ((player1.position[0] >= canvasWidth * .95)||(player2.position[0] >= canvasWidth * .95)){
-            console.log('winner!!');//TO DO: ADD WIN CONDITION!! === redirect? save wins in localStorage
-        }
         
-        //allow for window resize during gameplay, cuz why not ;P
+        //check for collisions
+        topAsteroids.forEach(function(asteroid){
+            if(collides(asteroid, player1)){
+                    console.log("Boom! Player 1 is Hit!");
+                    player1.position = [15, 80];
+               }
+        });
+        bottomAsteroids.forEach(function(asteroid){
+            if(collides(asteroid, player2)){
+                    console.log("Boom! Player 2 is Hit!");
+                    player2.position = [15, 80];
+               }
+        });
+        game.checkForWinners();
+
+        //allow for window resize during gameplay, cuz why not ;-P
         window.onresize = function(){
-        $('.fore').attr("width", $('div').width()) 
-        canvasWidth = $('#canvas1-front').width();
-        console.log(canvasWidth);
-        update(player1, player2, 0.125);
-    };
-    //=============================================================================================================================================
+            $('.fore').attr("width", $('div').width()) 
+            canvasWidth = $('#canvas1-front').width();
+            console.log(canvasWidth);
+            setPlayerPositions(player1, player2, speedMultiplier);
+        };
+
     }, 15);
+//==================================================================================================================================================    
+    function Game(){
+        this.setBoundries = function(player){
+            if (player.position[0] < 0){
+                player.position[0] = 1;
+            } else if (player.position[0] > canvasWidth - player.size[0]){
+                player.position[0] = canvasWidth - (player.size[0] - 1);
+            }
+            if (player.position[1] < 0){
+                player.position[1] = 1;
+            } else if (player.position[1] > canvasHeight - player.size[1]){
+                player.position[1] = canvasHeight - (player.size[1] - 1);
+            }
+        };
+        this.checkForWinners = function(){
+            if ((player1.position[0] >= canvasWidth * .95)&&(player2.position[0] < canvasWidth * finishPosition)){
+                alert('Player 1 Wins!');
+                keysDown = {};
+                player1.position = [15, 80];
+                player2.position = [15, 80];
+            }else if ((player2.position[0] >= canvasWidth * .95)&&(player1.position[0] < canvasWidth * finishPosition)){
+                alert('Player 2 Wins!');
+                keysDown = {};
+                player1.position = [15, 80];
+                player2.position = [15, 80];
+            }
+        };
+    }
     
     function Player(context, avatar){
         this.size = [26, 26];
@@ -127,17 +163,27 @@ $(function(){
         this.avatar = avatar;
         this.context = context;
         this.drawPlayer =  function(){
-            context.drawImage(avatar, this.position[0], this.position[1], this.size[0], this.size[1]);
-        }
-    };
+            context.drawImage(avatar, this.position[0]
+                              , this.position[1], this.size[0]
+                              , this.size[1]);
+        };
+    }
+    
+    function Tracks(canvas1, canvas2){
+        this.topTrackCanvas = canvas1[0];
+        this.topTrackCanvasContext = this.topTrackCanvas.getContext('2d');
+        this.bottomTrackCanvas = canvas2[0];
+        this.bottomTrackCanvasContext = this.bottomTrackCanvas.getContext('2d');
+    }
     
     function generateAsteroids(context, array, avatar){
         var newAsteroid;
-        if(Math.random() > 0.95){
+        if(Math.random() > difficulty){
             for(i = 0; i < Math.floor(Math.random() * 3); i++){
                 newAsteroid = new Player(context, avatar);
                 newAsteroid.speed = 3 + Math.round(Math.random() * 3);
-                newAsteroid.position = [canvasWidth - newAsteroid.size[0],(Math.random() * (canvasHeight - newAsteroid.size[1]))] 
+                newAsteroid.position = [canvasWidth - newAsteroid.size[0]
+                                        ,(Math.random() * (canvasHeight - newAsteroid.size[1]))]; 
                 array.push(newAsteroid);
             } 
         }
@@ -154,8 +200,11 @@ $(function(){
         });
     }
     
-
+    function collides(asteroid, player) {
+      return asteroid.position[0] < player.position[0] + player.size[0] &&
+             asteroid.position[0] + asteroid.size[0] > player.position[0] &&
+             asteroid.position[1] < player.position[1] + player.size[1] &&
+             asteroid.position[1] + asteroid.size[1] > player.position[1];
+    }
     
-    
-
 });
