@@ -6,6 +6,13 @@ $(function(){
     music.volume = 0.4;
     music.loop = true;
     music.play();
+    $('#muteButton').click(function(){
+        if(music.volume > 0){
+            music.volume = 0;
+        } else{
+            music.volume = 0.4;
+        }
+    })
     //set canvas widths to the Div #frame widths so that we can change them dynamically
     $('.fore').attr("width", $('div').width()) 
     //keeps track of the width of the tracks

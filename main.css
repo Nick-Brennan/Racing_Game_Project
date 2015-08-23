@@ -57,6 +57,7 @@ img{
 }
 
 #fig1{
+    margin: auto;
     display: inline-block;
 }
 
@@ -65,5 +66,24 @@ figcaption{
 }
 
 #figBox{
+    display: inline-block;
     text-align: center;
+    vertical-align: bottom;
+    margin-left: 100px;
+}
+
+#muteButton p{
+    font-family: impact;
+        ;
+    text-align: center;
+    width: 50px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#muteButton{
+    display: inline-block;
+    border: 1px solid black;
+    float: right;
+    margin-top: 20px;
+    background-color: rgba(45 , 200, 150, 0.5);
 }
