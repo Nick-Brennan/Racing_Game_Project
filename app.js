@@ -22,15 +22,15 @@ $(function(){
     //initialize the race tracks
     var tracks = new Tracks($('#canvas1-front'), $('#canvas2-front'), $('#top-effects'), $('#bottom-effects'));
 
-    /*CHANGE THESE TO TWEAK GAME-PLAY*///=====================================
-    //difficulty: Lower is Harder! 1 === asteroids off. 0 === impossible!!!
-    //Speed multiplier: small changes make a large impact.
-    //adjust if altering FPS (setInterval time value) or to make ships snappier
-    //Lowering finish position brings it closer to the start.
-    var difficulty = 0.97;
-    var speedMultiplier = 0.15;
-    var finishPosition = .9;
-    //=========================================================================
+    /*CHANGE THESE TO TWEAK GAME-PLAY*///=======================================
+    //difficulty: Lower is Harder! 1 === asteroids off. 0 === impossible!!!    *
+    //Speed multiplier: small changes make a large impact.                     *
+    //adjust if altering FPS (setInterval time value) or to make ships snappier*
+    //Lowering finish position brings it closer to the start.                  *
+    var difficulty = 0.97;                                                   //*
+    var speedMultiplier = 0.15;                                              //*
+    var finishPosition = .9;                                                 //*
+    //==========================================================================
        
     //prep holding arrays for the spawned asteroids and explosions
     var topAsteroids = [];
@@ -50,12 +50,14 @@ $(function(){
             console.log(game.images[p1Avatar]);
             player1.avatar = game.images[p1Avatar];
             player2.avatar = game.images[p2Avatar];
+            keysDown = {};
        });
     $('#p2-avatar').change(function(){
             var p1Avatar = $('#p1-avatar').val();
             var p2Avatar = $('#p2-avatar').val();
             player1.avatar = game.images[p1Avatar];
             player2.avatar = game.images[p2Avatar];
+            keysDown = {};
        });
    
     
