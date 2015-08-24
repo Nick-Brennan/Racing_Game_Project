@@ -2,7 +2,7 @@
 $(function(){
     //instantiate a new game
     var game = new Game();
-    var music = new Audio('StarWarsElevatorMusic.mp3');
+    var music = new Audio('audio/StarWarsElevatorMusic.mp3');
     music.volume = 0.4;
     music.loop = true;
     music.play();
@@ -143,7 +143,7 @@ $(function(){
                 topExplosions.unshift(explosion);
                 player1.position = [15, 80];
                 topAsteroids.splice(index, 1);
-                var boom = new Audio('Explosion_04.wav');
+                var boom = new Audio('audio/Explosion_04.wav');
                 boom.volume = 0.75;
                 boom.play();
             }
@@ -155,7 +155,7 @@ $(function(){
                     topExplosions.unshift(explosion);
                     player2.position = [15, 80];
                     bottomAsteroids.splice(index, 2);
-                    var boom = new Audio('Explosion_04.wav');
+                    var boom = new Audio('audio/Explosion_04.wav');
                     boom.volume = 0.75;
                     boom.play();
                }
