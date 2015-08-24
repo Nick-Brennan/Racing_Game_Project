@@ -15,14 +15,36 @@ h1{
     text-align: center;
     font-family: 'trebuchet MS1';
     font-variant: small-caps;
+    font-size: 42px;
     margin-bottom: 7px;
-    margin-top: 5px;
+    margin-top: 3px;
     letter-spacing: 5px;
     
 }
 
 #titleBar{
+    height: 50px;
     background-color: #736C6C;
+}
+
+.nav{
+    display: inline-block;
+    text-align: center;
+}
+
+#nav-left{
+    vertical-align: top;
+    width: 29%;
+}
+
+#nav-middle{
+    vertical-align: top;
+    width: 40%;
+}
+
+#nav-right{ 
+    width: 29%;
+    vertical-align: top;
 }
 
 div{
@@ -57,6 +79,8 @@ img{
 }
 
 #fig1{
+    margin: auto;
+    margin-bottom: 0;
     display: inline-block;
 }
 
@@ -65,5 +89,37 @@ figcaption{
 }
 
 #figBox{
+    display: inline-block;
     text-align: center;
+    vertical-align: bottom;
+    margin-bottom: 0;
+
+}
+
+#spacer{
+    display: inline-block;
+    width: 20%
+}
+
+#muteButton p{
+    font-family: impact;
+    text-align: center;
+    width: 50px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#muteButton{
+    display: inline-block;
+    border: 1px solid black;
+
+    margin-top: 20px;
+    background-color: rgba(45 , 200, 150, 0.5);
+}
+
+
+#buttonBox{
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+    float: right;    
 }

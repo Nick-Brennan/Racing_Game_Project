@@ -6,6 +6,14 @@ $(function(){
     music.volume = 0.4;
     music.loop = true;
     music.play();
+    $('#muteButton').click(function(){
+        if(music.volume > 0){
+            music.volume = 0;
+        } else{
+            music.volume = 0.4;
+        }
+    })
+
     //set canvas widths to the Div #frame widths so that we can change them dynamically
     $('.fore').attr("width", $('div').width()) 
     //keeps track of the width of the tracks
@@ -25,14 +33,31 @@ $(function(){
     //=========================================================================
        
     //prep holding arrays for the spawned asteroids and explosions
-    var  topAsteroids = [];
+    var topAsteroids = [];
     var bottomAsteroids = [];
     var topExplosions = [];
     var bottomExplosions = [];
     
     //instantiatie both players
-    var player1 = new Player(tracks.topTrackCanvasContext, game.images['xWing']);
-    var player2 = new Player(tracks.bottomTrackCanvasContext, game.images['interceptor']);
+    var player1 = new Player(tracks.topTrackCanvasContext, game.images[$('#p1-avatar').val()]);
+    var player2 = new Player(tracks.bottomTrackCanvasContext, game.images[$('#p2-avatar').val()]);
+    console.log(player1.avatar);
+    
+    $('#p1-avatar').change(function(){
+            var p1Avatar = $('#p1-avatar').val();
+            var p2Avatar = $('#p2-avatar').val();
+            console.log(p1Avatar);
+            console.log(game.images[p1Avatar]);
+            player1.avatar = game.images[p1Avatar];
+            player2.avatar = game.images[p2Avatar];
+       });
+    $('#p2-avatar').change(function(){
+            var p1Avatar = $('#p1-avatar').val();
+            var p2Avatar = $('#p2-avatar').val();
+            player1.avatar = game.images[p1Avatar];
+            player2.avatar = game.images[p2Avatar];
+       });
+   
     
     //draw the players in the start position
     player1.drawPlayer();
@@ -93,10 +118,7 @@ $(function(){
     
     //================================HERE IS MY MAIN GAME LOOP!==================================================================================
     setInterval(function(){ 
-        //test
-        if(topExplosions[0]){
-            console.log(topExplosions[0].context);
-        }
+
         //reset the canvas widths to clear the frame
         $('.fore').attr("width", $('div').width())
         tracks.topEffectsCanvas.width = canvasWidth;
@@ -111,23 +133,23 @@ $(function(){
         generateAsteroids(tracks.bottomTrackCanvasContext, bottomAsteroids, game.images['asteroidImg']);
         updateAsteroids(bottomAsteroids);
         
-        //check for collisions with both players==TO DO: ADD EXPLOSION EFFECT / MAYBE AUDIO===
+        //check for collisions with both players and apply effects "BOOM!!!" :)
         topAsteroids.forEach(function(asteroid, index){
             if(collides(asteroid, player1)){
-                    var explosion = new Explosion(tracks.topEffectsCanvasContext
-                                                , [player1.position[0] + 5, player1.position[1]]);
-                    topExplosions.unshift(explosion);
-                    player1.position = [15, 80];
-                    topAsteroids.splice(index, 1);
-                    var boom = new Audio('Explosion_04.wav');
-                    boom.volume = 0.75;
-                    boom.play();
-               }
+                var explosion = new Explosion(tracks.topEffectsCanvasContext
+                                            , [player1.position[0], player1.position[1] - 7]);
+                topExplosions.unshift(explosion);
+                player1.position = [15, 80];
+                topAsteroids.splice(index, 1);
+                var boom = new Audio('Explosion_04.wav');
+                boom.volume = 0.75;
+                boom.play();
+            }
         });
         bottomAsteroids.forEach(function(asteroid, index){
             if(collides(asteroid, player2)){
                     var explosion = new Explosion(tracks.bottomEffectsCanvasContext
-                                                , [player2.position[0] + 5, player2.position[1]]);
+                                                , [player2.position[0], player2.position[1] - 7]);
                     topExplosions.unshift(explosion);
                     player2.position = [15, 80];
                     bottomAsteroids.splice(index, 2);
@@ -156,7 +178,7 @@ $(function(){
         //check for a winner
         game.checkForWinners();
 
-        //allow for window resize during gameplay, cuz why not ;-P
+        //allow for window resize during gameplay, cuz why not ;-P ...actualy pretty handy while debugging
         window.onresize = function(){
             $('.fore').attr("width", $('div').width()) 
             canvasWidth = $('#canvas1-front').width();
@@ -214,7 +236,7 @@ $(function(){
         this.avatar = avatar;
         this.context = context;
         this.drawPlayer =  function(){
-            this.context.drawImage(avatar, this.position[0]
+            this.context.drawImage(this.avatar, this.position[0]
                               , this.position[1], this.size[0]
                               , this.size[1]);
         };
@@ -277,7 +299,7 @@ $(function(){
             }
         });
     }
-    
+
     function collides(asteroid, player) {
       return asteroid.position[0] < player.position[0] + player.size[0] &&
              asteroid.position[0] + asteroid.size[0] > player.position[0] &&
