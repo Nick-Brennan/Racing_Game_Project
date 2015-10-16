@@ -28,7 +28,7 @@ $(function(){
     //adjust if altering FPS (setInterval time value) or to make ships snappier*
     //Lowering finish position brings it closer to the start.                  *
     var difficulty = 0.97;                                                   //*
-    var speedMultiplier = 0.15;                                              //*
+    var speedMultiplier = 0.2;                                              //*
     var finishPosition = .9;                                                 //*
     //==========================================================================
        

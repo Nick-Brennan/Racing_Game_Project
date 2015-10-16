@@ -17,14 +17,15 @@ h1{
     font-variant: small-caps;
     font-size: 42px;
     margin-bottom: 7px;
-    margin-top: 3px;
+    /*margin-top: 3px;*/
     letter-spacing: 5px;
     
 }
 
 #titleBar{
-    height: 50px;
-    background-color: #736C6C;
+    height: 80px;
+    text-align: center;
+
 }
 
 .nav{
@@ -33,18 +34,18 @@ h1{
 }
 
 #nav-left{
-    vertical-align: top;
+    vertical-align: bottom;
     width: 29%;
 }
 
 #nav-middle{
-    vertical-align: top;
+    vertical-align: center;
     width: 40%;
 }
 
 #nav-right{ 
     width: 29%;
-    vertical-align: top;
+    vertical-align: bottom;
 }
 
 div{
@@ -104,6 +105,7 @@ figcaption{
 #muteButton p{
     font-family: impact;
     text-align: center;
+    letter-spacing: 2px;
     width: 50px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -123,3 +125,10 @@ figcaption{
     width: 20%;
     float: right;    
 }
+
+select{
+    width: 33%;
+}
+
+
+

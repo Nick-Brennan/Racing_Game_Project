@@ -6,13 +6,15 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" type="text/css" href="main.css">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="app.js"></script>
 </head>
 <body>
   <div id="titleBar">
     <div id="nav-left" class="nav">
-        <select name="p1-avatar" id="p1-avatar">
+        <select name="p1-avatar" id="p1-avatar" class="form-control">
             <option value="xWing" selected>X Wing</option>
             <option value="interceptor">Tie Interceptor</option>
             <option value="slave1">Slave 1</option>
@@ -23,14 +25,15 @@
         <h1>Darth Racer</h1>
     </div> 
     <div id="nav-right" class="nav">
-        <select name="p2-avatar" id="p2-avatar">
+        <select name="p2-avatar" id="p2-avatar" class="form-control">
             <option value="xWing">X Wing</option>
             <option value="interceptor" selected>Tie Interceptor</option>
             <option value="slave1">Slave 1</option>
             <option value="tardis">The Tardis</option>
         </select>
     </div>   
-  </div>    
+  </div>  
+
   <div id="game-screen">  
       <div class="frame" id="top-track">
           <canvas id="top-effects" class="effects" width="100%" height="200px"></canvas>  
@@ -44,13 +47,14 @@
   <div id="spacer"></div>  
   <span id="figBox">  
       <figure>
-          <figcaption><b>Player 1: WASD  </b> -|||:||:|||- <b> Player 2:</b> ◄▲▼►</figcaption>
+          <figcaption><b>Player 1</b>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp<b>Player 2</b></figcaption>
           <img src="images/image003.png" id="fig1" width="300" height="75px"/>
       </figure>
   </span>
   <div id="buttonBox">  
-      <div id="muteButton"><p>Mute</p></div> 
-  </div>    
+      <div id="muteButton" class='btn'><p>Mute</p></div> 
+  </div>  
+ 
     <img src="images/star_wars_x-wing.gif" id='xWing'/>
     <img src="images/interceptor.gif" id="interceptor"/>
     <img src="images/bg_viper_mk2.gif" id="viper"/>
